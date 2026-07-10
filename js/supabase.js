@@ -22,4 +22,4 @@ const BUCKET = 'drive-storage';
 // ---- Storage limit per user (15 GB) ----
 const STORAGE_LIMIT = 15 * 1024 * 1024 * 1024;
 
-export { sb, BUCKET, STORAGE_LIMIT };
+export { sb, BUCKET, STORAGE_LIMIT, SUPABASE_URL, SUPABASE_ANON };
