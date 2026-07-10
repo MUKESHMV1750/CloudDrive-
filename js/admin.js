@@ -1,7 +1,7 @@
 // ============================================================
 // admin.js — Admin Dashboard & User Management
 // ============================================================
-import { sb }    from './supabase.js';
+import { sb, SUPABASE_URL, SUPABASE_ANON } from './supabase.js';
 import { toast } from './notification.js';
 import { formatSize, formatDate, avatarHtml, confirmDialog, getInitials } from './utils.js';
 
@@ -189,11 +189,18 @@ export function showAddUserModal(onCreated) {
     btn.disabled = true; btn.textContent = 'Creating…';
 
     try {
-      const { data, error } = await sb.auth.admin.createUser({
-        email, password: pass, email_confirm: true,
-        user_metadata: { name, role }
+      // Use a secondary client so we don't log out the admin
+      const tempClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {
+        auth: { persistSession: false, autoRefreshToken: false }
+      });
+      const { data, error } = await tempClient.auth.signUp({
+        email, password: pass,
+        options: { data: { name, role } }
       });
       if (error) throw error;
+      if (!data?.user) throw new Error("Failed to create user");
+      
+      // Upsert profile in main DB
       await sb.from('users').upsert({ id: data.user.id, name, email, role });
       toast.success(`User "${name}" created`);
       close();
