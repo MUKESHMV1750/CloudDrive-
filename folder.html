@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Folder — CloudDrive</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/card.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+</head>
+<body>
+<div class="app-layout">
+  <div id="sidebar-container"></div>
+  <div class="main-content">
+    <header class="topbar">
+      <button class="btn-icon hamburger" id="hamburger"><span class="material-symbols-outlined">menu</span></button>
+      <div class="topbar-search">
+        <div class="search-box">
+          <span class="material-symbols-outlined">search</span>
+          <input type="text" id="global-search" placeholder="Search in folder">
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="btn-icon" data-action="toggle-theme"><span class="material-symbols-outlined" data-theme-icon>dark_mode</span></button>
+        <button class="btn-icon" id="upload-trigger"><span class="material-symbols-outlined">upload</span></button>
+        <div class="dropdown">
+          <button class="user-avatar-btn" id="user-avatar-btn">
+            <div class="avatar" id="topbar-avatar">U</div>
+          </button>
+          <div class="dropdown-menu hidden" id="user-menu">
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border)">
+              <div id="user-display-name" style="font-weight:600;font-size:14px"></div>
+              <div id="user-display-email" style="font-size:12px;color:var(--text-secondary)"></div>
+            </div>
+            <button class="dropdown-item danger" data-action="logout"><span class="material-symbols-outlined">logout</span>Sign out</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div id="breadcrumb-container" class="breadcrumb">
+      <a class="breadcrumb-item" href="dashboard.html">
+        <span class="material-symbols-outlined" style="font-size:18px">home</span>My Drive
+      </a>
+    </div>
+
+    <div class="page-header">
+      <h1 class="page-title" id="folder-title">Folder</h1>
+      <div class="page-actions">
+        <button class="btn btn-outlined btn-sm" id="new-subfolder-btn">
+          <span class="material-symbols-outlined">create_new_folder</span>New Subfolder
+        </button>
+        <button class="btn btn-primary btn-sm" id="upload-trigger">
+          <span class="material-symbols-outlined">upload</span>Upload Here
+        </button>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar-right">
+        <div class="view-toggle">
+          <button class="view-btn active" id="view-grid"><span class="material-symbols-outlined">grid_view</span></button>
+          <button class="view-btn" id="view-list"><span class="material-symbols-outlined">list</span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="drop-zone" id="drop-zone">
+      <span class="material-symbols-outlined drop-zone-icon">cloud_upload</span>
+      <h4>Drop files here to upload to this folder</h4>
+    </div>
+
+    <div class="content-area" id="content-area"></div>
+  </div>
+</div>
+<div class="toast-container"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>fetch('components/sidebar.html').then(r=>r.text()).then(h=>{document.getElementById('sidebar-container').innerHTML=h})</script>
+<script src="js/folder.bundle.js"></script>
+</body>
+</html>
+

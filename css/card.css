@@ -1,0 +1,112 @@
+/* ==== card.css — File & Folder Cards ==== */
+
+/* ---- File Card (Grid) ---- */
+.file-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;cursor:pointer;transition:all var(--t-fast);position:relative;display:flex;flex-direction:column;user-select:none}
+.file-card:hover{box-shadow:var(--shadow-md);border-color:var(--border-hover);transform:translateY(-1px)}
+.file-card.selected{border-color:var(--primary);background:var(--bg-active)}
+
+/* Card Header */
+.card-header{display:flex;align-items:center;padding:8px 12px;gap:8px}
+.card-icon{display:flex;align-items:center;justify-content:center}
+.card-title{flex:1;font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text-primary)}
+
+/* Thumbnail */
+.file-thumb{height:140px;background:var(--bg-hover);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.file-thumb img, .file-thumb canvas{width:100%;height:100%;object-fit:cover}
+.file-thumb-icon{font-size:40px}
+.file-thumb-overlay{position:absolute;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;gap:4px;opacity:0;transition:opacity var(--t-fast)}
+.file-card:hover .file-thumb-overlay{opacity:1}
+.thumb-action{width:32px;height:32px;border-radius:var(--r-full);background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-size:18px;color:#202124;cursor:pointer;transition:background var(--t-fast)}
+.thumb-action:hover{background:#fff}
+
+/* Checkbox */
+.file-checkbox{position:absolute;top:8px;left:8px;width:20px;height:20px;border-radius:4px;border:2px solid rgba(255,255,255,.8);background:rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;opacity:0;transition:all var(--t-fast);z-index:1;cursor:pointer}
+.file-card:hover .file-checkbox,.file-card.selected .file-checkbox{opacity:1}
+.file-card.selected .file-checkbox{background:var(--primary);border-color:var(--primary);opacity:1}
+.file-checkbox .material-symbols-outlined{font-size:14px;color:#fff}
+
+/* Star Button */
+.file-star{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:var(--r-full);display:flex;align-items:center;justify-content:center;font-size:16px;opacity:0;transition:all var(--t-fast);cursor:pointer;background:rgba(255,255,255,.9);color:#5F6368;z-index:1}
+.file-card:hover .file-star,.file-card .file-star.starred{opacity:1}
+.file-star.starred{color:var(--warning)}
+
+/* Card Footer */
+.card-footer{display:flex;align-items:center;padding:10px 12px;gap:8px}
+.card-footer-text{font-size:12px;color:var(--text-secondary)}
+
+/* File Type Colors */
+.file-thumb.pdf   { background: #FCE8E6; }
+.file-thumb.pdf .file-thumb-icon { color: #EA4335; }
+.file-thumb.doc,.file-thumb.docx { background: #E3F2FD; }
+.file-thumb.doc .file-thumb-icon,.file-thumb.docx .file-thumb-icon { color: #1565C0; }
+.file-thumb.xls,.file-thumb.xlsx { background: #E8F5E9; }
+.file-thumb.xls .file-thumb-icon,.file-thumb.xlsx .file-thumb-icon { color: #2E7D32; }
+.file-thumb.ppt,.file-thumb.pptx { background: #FFF3E0; }
+.file-thumb.ppt .file-thumb-icon,.file-thumb.pptx .file-thumb-icon { color: #E65100; }
+.file-thumb.zip,.file-thumb.rar  { background: #EDE7F6; }
+.file-thumb.zip .file-thumb-icon,.file-thumb.rar .file-thumb-icon  { color: #512DA8; }
+.file-thumb.mp3,.file-thumb.wav  { background: #FCE4EC; }
+.file-thumb.mp3 .file-thumb-icon,.file-thumb.wav .file-thumb-icon  { color: #C2185B; }
+.file-thumb.mp4,.file-thumb.avi,.file-thumb.mov { background: #F3E5F5; }
+.file-thumb.mp4 .file-thumb-icon { color: #7B1FA2; }
+.file-thumb.js,.file-thumb.ts,.file-thumb.py,.file-thumb.java { background: #E8EAF6; }
+.file-thumb.js .file-thumb-icon { color: #303F9F; }
+
+/* ---- Folder Card (Grid) ---- */
+.folder-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px 14px;cursor:pointer;transition:all var(--t-fast);display:flex;align-items:center;gap:12px;position:relative;user-select:none}
+.folder-card:hover{box-shadow:var(--shadow-md);border-color:var(--border-hover);background:var(--bg-hover)}
+.folder-card.selected{border-color:var(--primary);background:var(--bg-active)}
+.folder-icon{font-size:32px;color:#FBBC05;flex-shrink:0}
+.folder-info{flex:1;min-width:0}
+.folder-name{font-size:var(--fs-base);font-weight:500;color:var(--text-primary);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.folder-meta{font-size:var(--fs-xs);color:var(--text-secondary);margin-top:2px}
+.folder-more{opacity:0;transition:opacity var(--t-fast);flex-shrink:0}
+.folder-card:hover .folder-more{opacity:1}
+
+/* ---- Folder Card (List row) ---- */
+.list-item .list-icon{font-size:22px;flex-shrink:0}
+.list-item .list-icon.folder-c{color:#FBBC05}
+
+/* ---- Skeleton Cards ---- */
+.skeleton-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
+.skeleton-thumb{height:120px;background:var(--bg-hover)}
+.skeleton-body{padding:10px 12px}
+.skeleton-line{height:12px;margin-bottom:8px;border-radius:var(--r-sm)}
+.skeleton-line.short{width:60%}
+
+/* ---- Image Lightbox ---- */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:1000;display:flex;align-items:center;justify-content:center;animation:fadeIn var(--t-fast)}
+.lightbox-img{max-width:90vw;max-height:90vh;object-fit:contain;border-radius:var(--r-sm)}
+.lightbox-close{position:absolute;top:16px;right:16px;width:40px;height:40px;border-radius:var(--r-full);background:rgba(255,255,255,.15);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:24px;transition:background var(--t-fast)}
+.lightbox-close:hover{background:rgba(255,255,255,.25)}
+.lightbox-caption{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.7);font-size:var(--fs-sm);background:rgba(0,0,0,.4);padding:6px 14px;border-radius:var(--r-full)}
+
+/* ---- Video/Audio Player Modal ---- */
+.media-modal .modal{max-width:640px}
+.media-player{width:100%;border-radius:var(--r-md);background:#000;outline:none}
+
+/* ---- PDF Viewer ---- */
+.pdf-frame{width:100%;height:70vh;border:none;border-radius:var(--r-md)}
+
+/* ---- Share Modal ---- */
+.share-user-list{margin-top:12px;display:flex;flex-direction:column;gap:8px;max-height:200px;overflow-y:auto}
+.share-user-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.share-user-row:last-child{border-bottom:none}
+.share-perm-select{margin-left:auto;border:1px solid var(--border);background:var(--bg-input);color:var(--text-primary);border-radius:var(--r-sm);padding:4px 8px;font-size:var(--fs-sm)}
+
+/* ---- Context Menu ---- */
+.context-menu{position:fixed;background:var(--bg-card);border-radius:var(--r-md);box-shadow:var(--shadow-lg);border:1px solid var(--border);min-width:180px;z-index:1001;overflow:hidden;animation:scaleIn .12s ease}
+
+/* ---- File Type Icon Helper ---- */
+.ft-icon{font-size:20px}
+.ft-pdf   {color:#EA4335}
+.ft-doc   {color:#1565C0}
+.ft-xls   {color:#2E7D32}
+.ft-ppt   {color:#E65100}
+.ft-img   {color:#1A73E8}
+.ft-vid   {color:#7B1FA2}
+.ft-aud   {color:#C2185B}
+.ft-zip   {color:#512DA8}
+.ft-code  {color:#303F9F}
+.ft-txt   {color:#5F6368}
+.ft-other {color:#9AA0A6}

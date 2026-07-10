@@ -1,0 +1,61 @@
+/* ==== login.css ==== */
+
+.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1A73E8 0%,#0D47A1 50%,#1A237E 100%);padding:24px;position:relative;overflow:hidden}
+
+/* Animated BG blobs */
+.login-blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.2;animation:blobFloat 8s ease-in-out infinite}
+.login-blob-1{width:500px;height:500px;background:#4FC3F7;top:-100px;right:-100px;animation-delay:0s}
+.login-blob-2{width:400px;height:400px;background:#CE93D8;bottom:-120px;left:-80px;animation-delay:-3s}
+.login-blob-3{width:300px;height:300px;background:#80CBC4;top:50%;right:20%;animation-delay:-5s}
+
+@keyframes blobFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-20px) scale(1.05)}}
+
+.login-card{background:rgba(255,255,255,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:24px;padding:48px 40px;width:100%;max-width:420px;box-shadow:0 24px 64px rgba(0,0,0,.3);position:relative;z-index:1;animation:slideUp .5s ease}
+
+[data-theme="dark"] .login-card{background:rgba(45,46,49,.95)}
+
+.login-logo{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:32px}
+.login-logo-img{width:44px;height:44px}
+.login-logo-name{font-size:var(--fs-2xl);font-weight:700;color:#202124}
+.login-logo-name span{color:var(--primary)}
+[data-theme="dark"] .login-logo-name{color:var(--text-primary)}
+
+.login-title{font-size:var(--fs-2xl);font-weight:700;color:var(--text-primary);margin-bottom:4px}
+.login-subtitle{font-size:var(--fs-base);color:var(--text-secondary);margin-bottom:28px}
+
+.login-form .form-group{margin-bottom:18px}
+.login-form .form-label{font-size:var(--fs-sm);font-weight:500;color:var(--text-secondary);margin-bottom:6px;display:block}
+.login-form .form-control{padding:12px 16px;font-size:var(--fs-base);border-radius:var(--r-md);border:1.5px solid var(--border);background:var(--bg-input);color:var(--text-primary);width:100%;transition:all var(--t-fast)}
+.login-form .form-control:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(26,115,232,.12)}
+
+/* Password toggle */
+.password-field{position:relative}
+.password-field .form-control{padding-right:44px}
+.password-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--text-tertiary);cursor:pointer;font-size:20px;border:none;background:none;padding:0;display:flex}
+.password-toggle:hover{color:var(--text-primary)}
+
+.login-options{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.remember-me{display:flex;align-items:center;gap:8px;font-size:var(--fs-sm);color:var(--text-secondary);cursor:pointer}
+.remember-me input{accent-color:var(--primary)}
+.forgot-link{font-size:var(--fs-sm);color:var(--primary);text-decoration:none;font-weight:500}
+.forgot-link:hover{text-decoration:underline}
+
+.login-btn{width:100%;height:48px;border-radius:var(--r-md);background:var(--primary);color:#fff;font-size:var(--fs-md);font-weight:600;border:none;cursor:pointer;transition:all var(--t-fast);display:flex;align-items:center;justify-content:center;gap:10px;letter-spacing:.2px}
+.login-btn:hover{background:var(--primary-hover);box-shadow:0 4px 16px rgba(26,115,232,.4)}
+.login-btn:active{transform:scale(.98)}
+.login-btn:disabled{opacity:.7;cursor:not-allowed}
+
+.login-divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--text-tertiary);font-size:var(--fs-sm)}
+.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.login-footer{margin-top:24px;text-align:center;font-size:var(--fs-sm);color:var(--text-secondary)}
+
+/* Error box */
+.login-error{background:#FCE8E6;border:1px solid #F5C6C2;border-radius:var(--r-md);padding:12px 16px;font-size:var(--fs-sm);color:var(--danger);margin-bottom:16px;display:flex;align-items:center;gap:8px;animation:slideDown .2s ease}
+[data-theme="dark"] .login-error{background:#4A1212;border-color:#7B2020}
+
+/* Success/Info box */
+.login-info{background:#E8F0FE;border:1px solid #C5D8F8;border-radius:var(--r-md);padding:12px 16px;font-size:var(--fs-sm);color:var(--primary);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+[data-theme="dark"] .login-info{background:#1D3461;border-color:#2A5298}
+
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}

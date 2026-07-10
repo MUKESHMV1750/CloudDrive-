@@ -1,0 +1,100 @@
+<!-- components/sidebar.html — Sidebar Navigation Component -->
+<!-- Include this via JS innerHTML or fetch/include -->
+<aside id="sidebar" class="sidebar">
+  <!-- Logo -->
+  <div class="sidebar-header">
+    <a class="sidebar-logo" href="dashboard.html">
+      <svg width="32" height="32" viewBox="0 0 44 44" fill="none">
+        <rect width="44" height="44" rx="12" fill="#1A73E8"/>
+        <path d="M14 28L22 14L30 28H14Z" fill="white" opacity="0.9"/>
+        <path d="M18 28L22 21L26 28H18Z" fill="white"/>
+        <circle cx="22" cy="30" r="3" fill="white"/>
+      </svg>
+      <span class="sidebar-logo-text">Cloud<span>Drive</span></span>
+    </a>
+  </div>
+
+  <!-- New / Upload -->
+  <div class="sidebar-new-btn">
+    <button class="btn-fab w-full" id="fab-upload">
+      <span class="material-symbols-outlined">add</span>
+      New
+    </button>
+  </div>
+
+  <!-- Main Navigation -->
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <a class="nav-item" data-page="dashboard.html" href="dashboard.html">
+        <span class="material-symbols-outlined">home</span>
+        <span class="nav-item-text">Home</span>
+      </a>
+      <a class="nav-item" data-page="dashboard.html" href="dashboard.html" id="nav-mydrive">
+        <span class="material-symbols-outlined">my_drive</span>
+        <span class="nav-item-text">My Drive</span>
+      </a>
+      <a class="nav-item" data-page="shared.html" href="shared.html">
+        <span class="material-symbols-outlined">people</span>
+        <span class="nav-item-text">Shared with me</span>
+      </a>
+      <a class="nav-item" data-page="recent.html" href="recent.html">
+        <span class="material-symbols-outlined">schedule</span>
+        <span class="nav-item-text">Recent</span>
+      </a>
+      <a class="nav-item" data-page="starred.html" href="dashboard.html?filter=starred">
+        <span class="material-symbols-outlined">star</span>
+        <span class="nav-item-text">Starred</span>
+      </a>
+      <a class="nav-item" data-page="trash.html" href="trash.html">
+        <span class="material-symbols-outlined">delete</span>
+        <span class="nav-item-text">Trash</span>
+      </a>
+    </div>
+
+    <!-- Admin Section -->
+    <div class="sidebar-section admin-nav hidden">
+      <div class="sidebar-section-label">Admin</div>
+      <a class="nav-item" data-page="admin.html" href="admin.html">
+        <span class="material-symbols-outlined">admin_panel_settings</span>
+        <span class="nav-item-text">Admin Dashboard</span>
+      </a>
+      <a class="nav-item" data-page="admin.html#users" href="admin.html#users">
+        <span class="material-symbols-outlined">manage_accounts</span>
+        <span class="nav-item-text">Manage Users</span>
+      </a>
+      <a class="nav-item" data-page="admin.html#logs" href="admin.html#logs">
+        <span class="material-symbols-outlined">history</span>
+        <span class="nav-item-text">Activity Logs</span>
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">More</div>
+      <a class="nav-item" data-page="settings.html" href="settings.html">
+        <span class="material-symbols-outlined">settings</span>
+        <span class="nav-item-text">Settings</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Storage Meter -->
+  <div class="sidebar-storage">
+    <div class="storage-label">
+      <span>Storage</span>
+      <strong><span id="storage-used">—</span></strong>
+    </div>
+    <div class="storage-bar">
+      <div id="storage-fill" class="storage-fill" style="width:0%"></div>
+    </div>
+    <div class="storage-text">
+      <span id="storage-used-full">—</span> of <span id="storage-free">15 GB</span> used
+    </div>
+    <a class="storage-upgrade" href="settings.html">
+      <span class="material-symbols-outlined" style="font-size:16px">cloud</span>
+      Upgrade Storage
+    </a>
+  </div>
+</aside>
+
+<!-- Mobile Overlay -->
+<div id="sidebar-overlay" class="sidebar-overlay"></div>

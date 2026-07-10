@@ -1,0 +1,68 @@
+/* ==== responsive.css ==== */
+
+/* Tablet: 768px–1024px */
+@media (max-width:1024px){
+  :root{--sidebar-w:220px}
+  .files-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* Mobile: ≤768px */
+@media (max-width:768px){
+  :root{--sidebar-w:256px}
+
+  /* Sidebar hidden off-screen */
+  .sidebar{transform:translateX(-100%);z-index:250}
+  .sidebar.open{transform:translateX(0);box-shadow:var(--shadow-xl)}
+  .sidebar-overlay.visible{display:block}
+
+  /* Main takes full width */
+  .main-content{margin-left:0}
+  .selection-bar{left:0}
+
+  /* Topbar */
+  .hamburger{display:flex}
+  .topbar{padding:0 12px;gap:8px}
+  .topbar-search{max-width:none}
+
+  /* Content */
+  .content-area{padding:0 12px 80px}
+  .page-header{padding:8px 12px 4px}
+  .breadcrumb{padding:4px 12px 8px}
+  .toolbar{padding:8px 12px;flex-direction:column;align-items:flex-start;gap:8px}
+  .filter-bar{padding:0 12px 8px}
+  .drop-zone{margin:0 12px 12px}
+
+  /* Files grid: 2 columns */
+  .files-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+
+  /* List view simpler on mobile */
+  .list-header{display:none}
+  .list-item{grid-template-columns:1fr auto;gap:8px}
+  .list-col:not(.list-col-name):not(:last-child){display:none}
+  .list-actions{opacity:1}
+
+  /* Upload panel: full width bottom */
+  .upload-panel{bottom:0;right:0;left:0;width:auto;border-radius:var(--r-lg) var(--r-lg) 0 0}
+
+  /* Admin stats */
+  .stats-grid{grid-template-columns:1fr 1fr}
+}
+
+/* Small mobile: ≤480px */
+@media (max-width:480px){
+  .files-grid{grid-template-columns:repeat(2,1fr);gap:6px}
+  .file-thumb{height:100px}
+  .file-thumb-icon{font-size:36px}
+  .stats-grid{grid-template-columns:1fr}
+  .modal{max-width:100%;border-radius:var(--r-lg) var(--r-lg) 0 0;position:fixed;bottom:0;top:auto;animation:slideUp var(--t-base)}
+  .modal-overlay{align-items:flex-end;padding:0}
+  .login-card{padding:32px 24px;border-radius:var(--r-lg)}
+}
+
+/* Print */
+@media print{
+  .sidebar,.topbar,.upload-panel,.toast-container,.context-menu,.modal-overlay{display:none!important}
+  .main-content{margin-left:0!important}
+  .content-area{padding:0}
+}

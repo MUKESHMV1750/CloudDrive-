@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CloudDrive — Your Files, Anywhere</title>
+  <meta name="description" content="CloudDrive — a secure Google Drive-style file storage application.">
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      display:flex;align-items:center;justify-content:center;min-height:100vh;
+      background:#F8F9FA;flex-direction:column;gap:14px}
+    .spinner{width:44px;height:44px;border:3px solid #DADCE0;border-top-color:#1A73E8;
+      border-radius:50%;animation:spin .8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .logo{display:flex;align-items:center;gap:10px}
+    .logo-name{font-size:22px;font-weight:700;color:#202124}
+    .logo-name span{color:#1A73E8}
+    .msg{color:#5F6368;font-size:14px}
+    .err{background:#FCE8E6;border:1px solid #f5c6c2;border-radius:8px;
+      padding:14px 20px;font-size:13px;color:#EA4335;max-width:360px;
+      text-align:center;display:none;line-height:1.6}
+    .err a{color:#1A73E8;font-weight:600}
+  </style>
+</head>
+<body>
+  <div class="logo">
+    <svg width="36" height="36" viewBox="0 0 44 44" fill="none">
+      <rect width="44" height="44" rx="12" fill="#1A73E8"/>
+      <path d="M14 28L22 14L30 28H14Z" fill="white" opacity="0.9"/>
+      <path d="M18 28L22 21L26 28H18Z" fill="white"/>
+      <circle cx="22" cy="30" r="3" fill="white"/>
+    </svg>
+    <span class="logo-name">Cloud<span>Drive</span></span>
+  </div>
+
+  <div class="spinner" id="spinner"></div>
+  <p class="msg" id="msg">Connecting…</p>
+  <div class="err" id="err"></div>
+
+  <!-- Supabase SDK (global 'supabase' object) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    /* ---- Credentials (duplicated here to avoid ES module issues) ---- */
+    var SUPABASE_URL  = 'https://qzponjtndrbsjdpplelr.supabase.co';
+    var SUPABASE_ANON = 'sb_publishable_DyXzJOxsa42WDRB5x_1Ivg_DZ13u0m7';
+
+    /* ---- Apply saved theme immediately ---- */
+    try {
+      var theme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+      document.body.style.background = theme === 'dark' ? '#202124' : '#F8F9FA';
+    } catch(e) {}
+
+    /* ---- Fallback: go to login after 7 s if nothing happens ---- */
+    var fallback = setTimeout(function(){ window.location.href = 'login.html'; }, 7000);
+
+    function showError(msg) {
+      clearTimeout(fallback);
+      document.getElementById('spinner').style.display = 'none';
+      document.getElementById('msg').style.display = 'none';
+      var el = document.getElementById('err');
+      el.style.display = 'block';
+      el.innerHTML = msg + '<br><br><a href="login.html">Go to Login &rarr;</a>';
+    }
+
+    /* ---- Main init (IIFE, no top-level await needed) ---- */
+    (function() {
+      if (typeof supabase === 'undefined') {
+        showError('<strong>Supabase SDK failed to load.</strong><br>Check your internet connection.');
+        return;
+      }
+
+      var client;
+      try {
+        client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {
+          auth: { autoRefreshToken: true, persistSession: true }
+        });
+      } catch(e) {
+        showError('<strong>Init error:</strong> ' + e.message);
+        return;
+      }
+
+      document.getElementById('msg').textContent = 'Checking session…';
+
+      client.auth.getSession().then(function(result) {
+        var session = result.data && result.data.session;
+
+        if (!session) {
+          clearTimeout(fallback);
+          document.getElementById('msg').textContent = 'Redirecting to login…';
+          window.location.href = 'login.html';
+          return;
+        }
+
+        document.getElementById('msg').textContent = 'Welcome back!';
+        return client.from('users')
+          .select('role')
+          .eq('id', session.user.id)
+          .single()
+          .then(function(pr) {
+            clearTimeout(fallback);
+            var role = pr.data && pr.data.role;
+            window.location.href = (role === 'admin') ? 'admin.html' : 'dashboard.html';
+          });
+
+      }).catch(function(err) {
+        showError('<strong>Connection failed:</strong> ' + (err.message || 'Unknown error'));
+      });
+    })();
+  </script>
+</body>
+</html>

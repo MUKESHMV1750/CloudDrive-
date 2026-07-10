@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — CloudDrive</title>
+  <meta name="description" content="Sign in to CloudDrive — your secure Google Drive clone powered by Supabase.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/login.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+</head>
+<body>
+
+<div class="login-page">
+  <div class="login-blob login-blob-1"></div>
+  <div class="login-blob login-blob-2"></div>
+  <div class="login-blob login-blob-3"></div>
+
+  <div class="login-card">
+    <!-- Logo -->
+    <div class="login-logo">
+      <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+        <rect width="44" height="44" rx="12" fill="#1A73E8"/>
+        <path d="M14 28L22 14L30 28H14Z" fill="white" opacity="0.9"/>
+        <path d="M18 28L22 21L26 28H18Z" fill="white"/>
+        <circle cx="22" cy="30" r="3" fill="white"/>
+      </svg>
+      <span class="login-logo-name">Cloud<span>Drive</span></span>
+    </div>
+
+    <h1 class="login-title">Welcome back</h1>
+    <p class="login-subtitle">Sign in to access your files</p>
+
+    <!-- Error / Info messages -->
+    <div id="login-error" class="login-error hidden">
+      <span class="material-symbols-outlined" style="font-size:18px">error</span>
+      <span id="login-error-text"></span>
+    </div>
+    <div id="login-info" class="login-info hidden">
+      <span class="material-symbols-outlined" style="font-size:18px">info</span>
+      <span id="login-info-text"></span>
+    </div>
+
+    <!-- Login Form -->
+    <form id="login-form" class="login-form" autocomplete="on" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="email">Email address</label>
+        <input class="form-control" id="email" type="email" name="email"
+          placeholder="you@example.com" autocomplete="email" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <div class="password-field">
+          <input class="form-control" id="password" type="password" name="password"
+            placeholder="Enter your password" autocomplete="current-password" required>
+          <button type="button" class="password-toggle" id="pw-toggle" aria-label="Toggle password">
+            <span class="material-symbols-outlined" id="pw-icon">visibility</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="login-options">
+        <label class="remember-me">
+          <input type="checkbox" id="remember" name="remember">
+          Remember me
+        </label>
+        <a href="#" class="forgot-link" id="forgot-link">Forgot password?</a>
+      </div>
+
+      <button type="submit" class="login-btn" id="login-btn">
+        <span id="login-btn-text">Sign In</span>
+        <span id="login-spinner" class="loading-spinner hidden"></span>
+      </button>
+    </form>
+
+    <!-- Forgot Password Form -->
+    <form id="forgot-form" class="login-form hidden" novalidate>
+      <p style="margin-bottom:16px;font-size:14px;color:var(--text-secondary)">
+        Enter your email and we'll send a password reset link.
+      </p>
+      <div class="form-group">
+        <label class="form-label" for="reset-email">Email address</label>
+        <input class="form-control" id="reset-email" type="email" placeholder="you@example.com" required>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button type="button" class="btn btn-outlined w-full" id="back-to-login">Back</button>
+        <button type="submit" class="login-btn" id="reset-btn" style="flex:1">
+          <span id="reset-btn-text">Send Reset Link</span>
+          <span id="reset-spinner" class="loading-spinner hidden"></span>
+        </button>
+      </div>
+    </form>
+
+    <div class="login-footer">
+      <span>Secured with Supabase Auth</span>
+      &nbsp;·&nbsp;
+      <a href="#" style="color:var(--text-tertiary)">Privacy Policy</a>
+    </div>
+  </div>
+</div>
+
+<!-- Supabase CDN — must be plain script, not module -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+  /* ---- Supabase config (inline to avoid ES module issues on file://) ---- */
+  var SUPABASE_URL  = 'https://qzponjtndrbsjdpplelr.supabase.co';
+  var SUPABASE_ANON = 'sb_publishable_DyXzJOxsa42WDRB5x_1Ivg_DZ13u0m7';
+  var client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {
+    auth: { autoRefreshToken: true, persistSession: true }
+  });
+
+  /* ---- Apply saved theme ---- */
+  (function() {
+    var t = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+
+  /* ---- Check URL params ---- */
+  (function() {
+    var p = new URLSearchParams(window.location.search);
+    if (p.get('err') === 'disabled') showError('Your account has been disabled. Contact your administrator.');
+    if (p.get('mode') === 'reset')   showInfo('Password updated! Please sign in with your new password.');
+  })();
+
+  /* ---- If already logged in, redirect ---- */
+  client.auth.getSession().then(function(res) {
+    var session = res.data && res.data.session;
+    if (session) redirectAfterLogin(session.user.id);
+  });
+
+  /* ---- Password visibility toggle ---- */
+  var pwInput = document.getElementById('password');
+  var pwIcon  = document.getElementById('pw-icon');
+  document.getElementById('pw-toggle').addEventListener('click', function() {
+    var show = pwInput.type === 'password';
+    pwInput.type = show ? 'text' : 'password';
+    pwIcon.textContent = show ? 'visibility_off' : 'visibility';
+  });
+
+  /* ---- Forgot password toggle ---- */
+  document.getElementById('forgot-link').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('login-form').classList.add('hidden');
+    document.getElementById('forgot-form').classList.remove('hidden');
+    hideMessages();
+  });
+  document.getElementById('back-to-login').addEventListener('click', function() {
+    document.getElementById('forgot-form').classList.add('hidden');
+    document.getElementById('login-form').classList.remove('hidden');
+    hideMessages();
+  });
+
+  /* ---- Login form submit ---- */
+  document.getElementById('login-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    hideMessages();
+    var email    = document.getElementById('email').value.trim();
+    var password = document.getElementById('password').value;
+
+    if (!email || !password) { showError('Please fill in all fields.'); return; }
+
+    setLoading(true, 'login');
+
+    client.auth.signInWithPassword({ email: email, password: password })
+      .then(function(res) {
+        if (res.error) throw res.error;
+        var userId = res.data.user.id;
+
+        // Check if disabled
+        return client.from('users').select('is_disabled, role').eq('id', userId).single()
+          .then(function(pr) {
+            if (pr.data && pr.data.is_disabled) {
+              client.auth.signOut();
+              throw new Error('Your account has been disabled.');
+            }
+            redirectAfterLogin(userId, pr.data && pr.data.role);
+          });
+      })
+      .catch(function(err) {
+        showError(err.message || 'Login failed. Please check your credentials.');
+        setLoading(false, 'login');
+      });
+  });
+
+  /* ---- Forgot password form submit ---- */
+  document.getElementById('forgot-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var email = document.getElementById('reset-email').value.trim();
+    if (!email) return;
+    setLoading(true, 'reset');
+
+    client.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/login.html?mode=reset'
+    }).then(function(res) {
+      if (res.error) { showError(res.error.message); setLoading(false, 'reset'); return; }
+      showInfo('Reset link sent! Check your email.');
+      document.getElementById('forgot-form').classList.add('hidden');
+      document.getElementById('login-form').classList.remove('hidden');
+      setLoading(false, 'reset');
+    });
+  });
+
+  /* ---- Helpers ---- */
+  function redirectAfterLogin(userId, role) {
+    if (role) {
+      window.location.href = role === 'admin' ? 'admin.html' : 'dashboard.html';
+      return;
+    }
+    // Fetch role if not provided
+    client.from('users').select('role').eq('id', userId).single().then(function(pr) {
+      var r = pr.data && pr.data.role;
+      window.location.href = r === 'admin' ? 'admin.html' : 'dashboard.html';
+    });
+  }
+
+  function showError(msg) {
+    document.getElementById('login-error').classList.remove('hidden');
+    document.getElementById('login-error-text').textContent = msg;
+    document.getElementById('login-info').classList.add('hidden');
+  }
+  function showInfo(msg) {
+    document.getElementById('login-info').classList.remove('hidden');
+    document.getElementById('login-info-text').textContent = msg;
+    document.getElementById('login-error').classList.add('hidden');
+  }
+  function hideMessages() {
+    document.getElementById('login-error').classList.add('hidden');
+    document.getElementById('login-info').classList.add('hidden');
+  }
+  function setLoading(loading, form) {
+    var prefix = (form === 'login') ? 'login' : 'reset';
+    var btnText = document.getElementById(prefix + '-btn-text');
+    var spinner = document.getElementById(prefix + '-spinner');
+    var btn     = document.getElementById(prefix + '-btn');
+    if (btn)     btn.disabled = loading;
+    if (btnText) btnText.classList.toggle('hidden', loading);
+    if (spinner) spinner.classList.toggle('hidden', !loading);
+  }
+</script>
+</body>
+</html>
