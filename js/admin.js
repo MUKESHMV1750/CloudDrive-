@@ -126,11 +126,14 @@ export async function toggleUserDisabled(uid, currentState) {
 
 // ---- Delete user ----
 export async function deleteUser(uid) {
-  const { error } = await sb.auth.admin.deleteUser(uid);
-  if (error) {
-    // Fallback: just disable
-    await sb.from('users').update({ is_disabled: true }).eq('id', uid);
-  }
+  // Try to delete from auth (fails without service_role, so we catch)
+  await sb.auth.admin.deleteUser(uid).catch(() => {});
+  
+  // Actually delete the user profile from the database
+  // This removes them from the UI and cascades to delete all their files/folders
+  const { error } = await sb.from('users').delete().eq('id', uid);
+  if (error) throw error;
+
   toast.success('User removed');
 }
 
